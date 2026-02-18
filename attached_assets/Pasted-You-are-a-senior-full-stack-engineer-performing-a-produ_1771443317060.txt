@@ -1,0 +1,187 @@
+You are a senior full-stack engineer performing a production hardening pass on an intern VC Intelligence project.
+
+The app already includes:
+
+Next.js frontend
+
+Express backend
+
+Database (companies, notes, lists, saved_searches)
+
+OpenAI enrichment endpoint
+
+Framer Motion UI
+
+TanStack table
+
+Premium layout
+
+Now improve it to address potential reviewer concerns and strictly satisfy the assignment requirements.
+
+1️⃣ REAL PUBLIC WEBSITE SCRAPING (CRITICAL FIX)
+
+Update the enrichment pipeline so it:
+
+Accepts company website URL.
+
+Fetches public HTML from:
+
+Homepage
+
+/about (if exists)
+
+/blog (if exists)
+
+/careers (if exists)
+
+Extracts readable text (strip scripts/styles).
+
+Combine text into one document.
+
+Send that content to OpenAI for structured extraction.
+
+DO NOT enrich using only database fields.
+It must analyze real public website content.
+
+2️⃣ STRUCTURED EXTRACTION FORMAT (STRICT)
+
+Modify OpenAI prompt to return:
+
+{
+summary: string (1–2 sentences),
+whatTheyDo: string[] (3–6 bullets),
+keywords: string[] (5–10),
+derivedSignals: string[] (2–4),
+thesisScore: number (0–100),
+scoreBreakdown: [
+{ reason: string, impact: number }
+]
+}
+
+Ensure output is valid JSON.
+
+Add validation before saving.
+
+3️⃣ DERIVED SIGNAL ENGINE (HYBRID)
+
+In addition to LLM signals, programmatically detect:
+
+If /careers exists → "Hiring"
+
+If /blog has recent posts → "Active blog"
+
+If "AI" keyword appears frequently → "AI-focused"
+
+If "enterprise" appears → "B2B signal"
+
+Combine deterministic signals + LLM signals.
+
+4️⃣ SOURCE TRANSPARENCY (MANDATORY)
+
+Return:
+
+sources: [
+{
+url: string,
+timestamp: ISO string
+}
+]
+
+Display sources clearly in UI under enrichment panel.
+
+5️⃣ CACHING LAYER
+
+Implement:
+
+If enrichment exists in DB and less than 7 days old → return cached result.
+
+Add enriched_at timestamp.
+
+Add “Re-enrich” button to override cache.
+
+This prevents unnecessary API calls.
+
+6️⃣ API KEY SAFETY CHECK
+
+Ensure:
+
+OpenAI key only accessed server-side.
+
+No keys in frontend.
+
+No key logged in console.
+
+Use process.env.
+
+Add .env.example file.
+
+7️⃣ LOADING + ERROR STATES (UI HARDENING)
+
+Improve UX:
+
+Skeleton loader during enrichment
+
+Animated progress indicator
+
+Retry button on failure
+
+Toast notification on success
+
+Disable button while loading
+
+Animate success checkmark
+
+8️⃣ EXPLAINABLE THESIS SCORE PANEL
+
+In Company Profile:
+
+Add expandable “Why This Matches” section showing:
+
+Score: 82/100
+
++20 Mentions AI infrastructure
++15 Hiring engineers
++10 Active blog
+-5 Consumer-focused
+
+Make this visually clean with motion expand/collapse.
+
+9️⃣ DUPLICATE DETECTION (POLISH)
+
+When adding companies:
+
+Normalize website domain
+
+Prevent duplicate domain entries
+
+🔟 PRODUCTION README UPGRADE
+
+Update README to include:
+
+Architecture overview diagram (text)
+
+Enrichment pipeline explanation
+
+Security explanation
+
+Caching explanation
+
+Why this solves thesis-first sourcing
+
+Write it in product language.
+
+FINAL REQUIREMENTS
+
+No pseudocode.
+
+All code must be working.
+
+Keep architecture modular.
+
+Maintain TypeScript types.
+
+Keep UI premium.
+
+No breaking changes.
+
+Refactor only where necessary.
