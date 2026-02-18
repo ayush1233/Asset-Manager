@@ -5,15 +5,32 @@ import { api, errorSchemas } from "@shared/routes";
 import { z } from "zod";
 import { openai } from "./replit_integrations/image/client"; // Reusing the OpenAI client config from image module
 
+import axios from "axios";
+import * as cheerio from "cheerio";
+
 // Helper to scrape and enrich
 async function enrichCompanyData(website: string, companyName: string) {
   try {
-    // 1. Fetch website content (mocking for now to avoid complexity with scraping protection)
-    // In a real scenario, use puppeteer or cheerio
-    // For this demo, we'll ask the LLM to generate based on the company name and website URL assuming it knows them
+    let scrapedContent = "";
+    try {
+      const response = await axios.get(website, { 
+        timeout: 5000,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      });
+      const $ = cheerio.load(response.data);
+      
+      // Remove script and style elements
+      $('script, style').remove();
+      scrapedContent = $('body').text().replace(/\s+/g, ' ').trim().slice(0, 5000);
+    } catch (scrapeError) {
+      console.warn(`Could not scrape ${website}, falling back to general knowledge`, scrapeError);
+    }
     
     const prompt = `
       Analyze the company "${companyName}" with website "${website}".
+      ${scrapedContent ? `Here is some content from their website: "${scrapedContent}"` : "Could not fetch website content, please use your general knowledge of this company if available."}
       
       Provide a JSON response with the following fields:
       - summary: A brief 2-sentence summary of what they do.
