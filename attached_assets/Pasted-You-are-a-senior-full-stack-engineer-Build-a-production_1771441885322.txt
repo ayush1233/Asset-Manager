@@ -1,0 +1,402 @@
+You are a senior full-stack engineer.
+
+Build a production-ready VC Intelligence platform called “ScoutFlow” inspired by Harmonic-style workflows and thesis-driven scouting systems.
+
+This must be a real Next.js 14 App Router project, fully deployable to Vercel.
+
+The application must strictly follow these requirements.
+
+🏗 TECH STACK
+
+Use:
+
+Next.js 14 (App Router)
+
+TypeScript
+
+TailwindCSS
+
+shadcn/ui
+
+Framer Motion (for animations)
+
+Lucide Icons
+
+TanStack Table (for sortable table)
+
+React Hook Form (if needed)
+
+Zod (validation)
+
+LocalStorage for persistence
+
+Server-side API route for enrichment
+
+Environment variables for API keys
+
+Architecture must look clean and professional.
+
+🎯 PRODUCT GOAL
+
+Build a thesis-first VC sourcing interface that:
+
+Discover → Open Profile → Enrich → Score → Save → Add Notes → Add to List → Export
+
+The product must feel premium, modern, and VC-grade.
+
+🖥 CORE ROUTES
+1️⃣ App Shell
+
+Sidebar navigation (collapsible with animation)
+
+Global search input in header
+
+Clean typography (Inter font)
+
+Responsive layout
+
+Smooth route transitions using Framer Motion
+
+Sidebar items:
+
+Companies
+
+Lists
+
+Saved Searches
+
+Add subtle motion:
+
+Sidebar slide-in animation
+
+Hover scale on nav items
+
+Active indicator animation
+
+2️⃣ /companies
+
+Features:
+
+Search input
+
+Faceted filters (sector, stage, location)
+
+Sortable columns
+
+Pagination
+
+Select rows
+
+Bulk add to list
+
+Use TanStack Table.
+
+Table columns:
+
+Name
+
+Sector
+
+Stage
+
+Location
+
+Website
+
+Score (placeholder)
+
+Add animations:
+
+Fade + stagger table row mount
+
+Smooth filter transitions
+
+Loading skeleton shimmer
+
+Seed with mockCompanies.json (10–20 realistic companies).
+
+3️⃣ /companies/[id]
+
+Company profile layout:
+
+Header Section
+
+Company name
+
+Tags
+
+Website link
+
+Enrich button (primary animated button)
+
+Enrich button:
+
+On click → call /api/enrich
+
+Show loading spinner
+
+Disable during request
+
+Animate success state
+
+Sections
+
+Overview
+
+Signals Timeline
+
+Notes (persist in localStorage)
+
+Save to List button
+
+Enrichment Panel
+
+🔥 LIVE ENRICHMENT REQUIREMENTS
+
+Create a server-side route:
+
+/app/api/enrich/route.ts
+
+It must:
+
+Accept company website URL
+
+Fetch public website HTML (use fetch)
+
+Extract text content
+
+Send content to LLM (OpenAI or similar via env variable)
+
+Return structured JSON:
+
+{
+summary: string,
+whatTheyDo: string[],
+keywords: string[],
+derivedSignals: string[],
+sources: [{ url: string, timestamp: string }]
+}
+
+Never expose API keys in frontend.
+
+Use:
+process.env.OPENAI_API_KEY
+
+Add caching:
+
+Cache enrichment result in memory or localStorage
+
+Avoid re-fetching if already enriched
+
+📊 DERIVED SIGNALS LOGIC
+
+From scraped content infer:
+
+Has careers page
+
+Recent blog posts
+
+Has changelog
+
+Hiring engineers
+
+Mentions funding
+
+Mentions AI
+
+Use simple keyword detection.
+
+📝 NOTES FEATURE
+
+Add notes section
+
+Persist per company in localStorage
+
+Auto-save
+
+Animate save confirmation
+
+📂 LISTS PAGE (/lists)
+
+Features:
+
+Create list
+
+Add/remove companies
+
+Delete list
+
+Export list as:
+
+CSV
+
+JSON
+
+Persist lists in localStorage.
+
+Add animation:
+
+Card hover lift
+
+Add-to-list toast animation
+
+🔍 SAVED SEARCHES (/saved)
+
+Save current filters
+
+Store in localStorage
+
+Re-run search on click
+
+Add animated list appearance.
+
+🎨 UI DESIGN REQUIREMENTS
+
+Make UI feel:
+
+Clean
+
+Premium
+
+Minimal
+
+VC-grade
+
+Use:
+
+Soft shadows
+
+Rounded-2xl cards
+
+Subtle borders
+
+Neutral color palette
+
+Accent color: Indigo or Emerald
+
+Add Framer Motion animations:
+
+Page transitions (fade + slight y shift)
+
+Button hover scale
+
+Card hover lift
+
+Smooth layout transitions
+
+Loading shimmer
+
+Skeleton loaders
+
+Animated empty states
+
+Use motion.div wrappers for route transitions.
+
+⚡ UX POLISH
+
+Add:
+
+Toast notifications
+
+Loading states
+
+Error states
+
+Empty states
+
+Animated success checkmarks
+
+Keyboard shortcut:
+Cmd + K → open search modal
+
+📁 PROJECT STRUCTURE
+
+Use clean structure:
+
+app/
+layout.tsx
+page.tsx
+companies/
+page.tsx
+[id]/page.tsx
+lists/page.tsx
+saved/page.tsx
+api/enrich/route.ts
+
+components/
+Sidebar.tsx
+CompanyTable.tsx
+EnrichmentPanel.tsx
+Notes.tsx
+ListManager.tsx
+
+lib/
+enrichment.ts
+utils.ts
+
+data/
+mockCompanies.json
+
+🔐 SECURITY REQUIREMENTS
+
+All enrichment must run server-side
+
+Use environment variables
+
+Document in README:
+
+.env.example:
+OPENAI_API_KEY=
+
+Never expose secrets.
+
+📦 README MUST INCLUDE
+
+Setup instructions
+
+Env variables
+
+How enrichment works
+
+Deployment steps
+
+Architecture explanation
+
+🚀 DEPLOYMENT
+
+Must be Vercel-ready.
+
+No breaking errors.
+
+All routes working.
+
+Enrichment works in production.
+
+💎 BONUS (If Time)
+
+Add explainable score tied to thesis keywords
+
+Animate score counter
+
+Add theme toggle (light/dark)
+
+Add smooth page progress bar
+
+⚠️ IMPORTANT
+
+Code must be:
+
+Clean
+
+Modular
+
+Typed
+
+No console spam
+
+No exposed secrets
+
+Production safe
+
+Do not generate pseudocode.
+Generate complete working files.
